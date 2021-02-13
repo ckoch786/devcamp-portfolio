@@ -1,6 +1,20 @@
 class PortfoliosController < ApplicationController
   def index
     @portfolio_items = Portfolio.all
+    #@portfolio_items = Portfolio.where(subtitle: 'Ruby on Rails')
+    # better to use Custom scopes instead
+    # @portfolio_items = Portfolio.angular 
+    # by using def self.angular where(subtitle: 'Angular') end
+    # or 
+    # @portfolio_items = Portfolio.ruby_on_rails_portfolio_items 
+    # scope :ruby_on_rails_portfolio_items, -> { where(subtitle: 'Ruby on Rails') }
+    # this forces you to keep all the logic for the database in the model
+    # the controller should just act as the traffic cop
+  end
+  
+  
+  def angular
+    @angular_portfolio_items = Portfolio.angular
   end
 
   def new
