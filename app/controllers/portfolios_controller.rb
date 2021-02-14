@@ -1,18 +1,37 @@
 class PortfoliosController < ApplicationController
   def index
     @portfolio_items = Portfolio.all
+    #@portfolio_items = Portfolio.where(subtitle: 'Ruby on Rails')
+    # better to use Custom scopes instead
+    # @portfolio_items = Portfolio.angular 
+    # by using def self.angular where(subtitle: 'Angular') end
+    # or 
+    # @portfolio_items = Portfolio.ruby_on_rails_portfolio_items 
+    # scope :ruby_on_rails_portfolio_items, -> { where(subtitle: 'Ruby on Rails') }
+    # this forces you to keep all the logic for the database in the model
+    # the controller should just act as the traffic cop
+  end
+  
+  
+  # these work find but are really fragile because of the 
+  # hard coded strings in the model, going to use techonologies instead
+  def angular
+    @angular_portfolio_items = Portfolio.angular
   end
 
   def new
     @portfolio_item = Portfolio.new
+    # will refactor in future to use js to generate dynamically
+    3.times { @portfolio_item.technologies.build }
   end
 
   def create
-    @portfolio_item = Portfolio.new(params.require(:portfolio).permit(:title, :subtitle, :body))
+    @portfolio_item = Portfolio.new(params.require(:portfolio).permit(:title, :subtitle, :body,
+      technologies_attributes: [:name]))
 
     respond_to do |format|
       if @portfolio_item.save
-        format.html { redirect_to portfolios_path, notice "Portfolio item was successfully created." }
+        format.html { redirect_to portfolios_path, notice: "Portfolio item was successfully created." }
       else
         format.html { render :new }
       end
