@@ -13,6 +13,8 @@ class PortfoliosController < ApplicationController
   end
   
   
+  # these work find but are really fragile because of the 
+  # hard coded strings in the model, going to use techonologies instead
   def angular
     @angular_portfolio_items = Portfolio.angular
   end

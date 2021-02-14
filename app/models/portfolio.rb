@@ -1,5 +1,11 @@
 class Portfolio < ApplicationRecord
     has_many :technologies
+    # the base implementation, there are some data validations that we want as well
+    # Portfolio.create!(title: "Web app", subtitle: "aoeu", body: "aoeuaoeuaoeu", technologies_attributes: [{ name: "Ruby" }, { name: "Angular"}, { name: "Rails" }, { name: "Ionic" }])
+    accepts_nested_attributes_for :technologies, 
+                                   reject_if: lambda { |attrs| attrs['name'].blank? }
+
+
     include Placeholder
     validates_presence_of :title, :body, :main_image, :thumb_image
     
